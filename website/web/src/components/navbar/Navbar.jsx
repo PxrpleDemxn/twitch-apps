@@ -1,30 +1,52 @@
 import { NavLink } from "react-router-dom";
-import { TabNav } from "@radix-ui/themes";
+import { TabNav, Flex } from "@radix-ui/themes";
 import { useLocation } from "react-router-dom";
+import { useAuth } from "../context/UserContext.jsx";
+import TwitchLogin from "../test/TwitchLogin";
 
 const Navbar = () => {
   const location = useLocation();
   const pathname = location.pathname;
+  const { user, loading } = useAuth();
+
   return (
-    <>
-      <TabNav.Root>
-        <TabNav.Link asChild active={pathname === "/"}>
-          <NavLink to="/">Home</NavLink>
-        </TabNav.Link>
+    <TabNav.Root>
+      <TabNav.Link asChild active={pathname === "/"}>
+        <NavLink to="/">Home</NavLink>
+      </TabNav.Link>
 
-        <TabNav.Link asChild active={pathname === "/store"}>
-          <NavLink to="/store">Store</NavLink>
-        </TabNav.Link>
+      <TabNav.Link asChild active={pathname === "/store"}>
+        <NavLink to="/store">Store</NavLink>
+      </TabNav.Link>
 
-        <TabNav.Link asChild active={pathname === "/games"}>
-          <NavLink to="/games">Games</NavLink>
-        </TabNav.Link>
+      <TabNav.Link asChild active={pathname === "/games"}>
+        <NavLink to="/games">Games</NavLink>
+      </TabNav.Link>
 
-        <TabNav.Link asChild active={pathname === "/about"}>
-          <NavLink to="/about">About</NavLink>
-        </TabNav.Link>
-      </TabNav.Root>
-    </>
+      <TabNav.Link asChild active={pathname === "/about"}>
+        <NavLink to="/about">About</NavLink>
+      </TabNav.Link>
+
+      <Flex align="center" style={{ marginLeft: "auto", paddingRight: "12px" }}>
+        {!user ? (
+          <TwitchLogin />
+        ) : (
+          <TabNav.Link asChild active={pathname === "/profile"}>
+            <NavLink to="/profile">
+              <Flex align="center" gap="3">
+                <p>💰 {user.coins}</p>
+                <img
+                  src={user.profileImageUrl}
+                  alt="avatar"
+                  style={{ height: "28px", borderRadius: "50%" }}
+                />
+                <p>{user.username}</p>
+              </Flex>
+            </NavLink>
+          </TabNav.Link>
+        )}
+      </Flex>
+    </TabNav.Root>
   );
 };
 
