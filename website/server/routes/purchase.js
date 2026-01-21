@@ -25,7 +25,7 @@ router.post("/create", authenticateToken, async (req, res) => {
   await User.updateOne(
     { twitchId: twitchId },
     {
-      $inc: { currency: -item.price },
+      $inc: { coins: -item.price },
       $push: {
         storePurchaseList: {
           purchaseId: newPurchase._id,
