@@ -49,31 +49,42 @@ router.post("/", async (req, res) => {
       },
     );
 
-    const checkSubscriber = await axios.get(
-      "https://api.twitch.tv/helix/subscriptions/user",
-      {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Client-Id": process.env.TWITCH_CLIENT_ID,
+    let isSubscriber;
+    try {
+      const response = await axios.get(
+        "https://api.twitch.tv/helix/subscriptions/user",
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Client-Id": process.env.TWITCH_CLIENT_ID,
+          },
+          params: {
+            user_id: userData.id,
+            broadcaster_id: process.env.TWITCH_TARGET_CHANNEL_ID,
+          },
         },
-        params: {
-          user_id: userData.id,
-          broadcaster_id: process.env.TWITCH_TARGET_CHANNEL_ID,
-        },
-      },
-    );
+      );
+      if (response) {
+        const data = await response.json();
+        isSubscriber = data.data.data.length > 0;
+      }
+    } catch (error) {
+      console.log(error);
+      isSubscriber = false;
+    }
 
-    const isFollowing = true;
-    const isSubscriber = checkSubscriber.data.data.length > 0;
+    const isFollowing = checkFollow.data.data.length > 0;
+    const followAge = checkFollow.data.data[0]?.followed_at;
 
     const user = await User.findOne({ twitchId: userData.id });
 
-    const canClaimBonus = isFollowing && (!user || !user.claimedFollowBonus);
+    const canClaimBonus = isFollowing && (!user || !user?.claimedFollowBonus);
 
     const setQuery = {
       username: userData.display_name,
       profileImageUrl: userData.profile_image_url,
       isFollowing: isFollowing,
+      followingSince: followAge ? new Date(followAge) : null,
       isSubscriber: isSubscriber,
       lastLogin: new Date(),
     };
