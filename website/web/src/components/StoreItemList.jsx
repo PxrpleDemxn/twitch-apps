@@ -4,13 +4,13 @@ import { AlertDialog, Flex, Button } from "@radix-ui/themes";
 
 const StoreItemList = () => {
   const { storeItems: items, isLoading } = useItems();
-  const { user, loading } = useAuth();
+  const { user, setUser, loading } = useAuth();
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  const onPurchase = async (itemId) => {
+  const onPurchase = async (item) => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
@@ -21,12 +21,33 @@ const StoreItemList = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ twitchId: user.twitchId, itemId: itemId }),
+          body: JSON.stringify({ twitchId: user.twitchId, itemId: item._id }),
         },
       );
+
+      const data = await response.json();
+      setUser((prev) => ({
+        ...prev,
+        coins: prev.coins - item.price,
+        storePurchaseList: [
+          ...prev.storePurchaseList,
+          {
+            purchaseId: data._id,
+            itemId: item._id,
+            date: data.purchaseDate,
+          },
+        ],
+        coinsHistory: [
+          ...prev.coinsHistory,
+          {
+            amount: -item.price,
+            reason: `${item.name}`,
+            date: new Date(),
+          },
+        ],
+      }));
     } catch (error) {
       console.error("Error making purchase:", error);
-      alert("Error making purchase");
     }
   };
 
@@ -62,7 +83,7 @@ const StoreItemList = () => {
                       <Button
                         variant="solid"
                         color="green"
-                        onClick={() => onPurchase(item._id)}
+                        onClick={() => onPurchase(item)}
                       >
                         Purchase
                       </Button>

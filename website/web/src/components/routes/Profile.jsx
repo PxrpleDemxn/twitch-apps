@@ -21,7 +21,12 @@ const Profile = () => {
           <p>Currency: {user.coins}</p>
           <p>Watch Time: {user.watchTime} minutes</p>
           <p>Subscriber: {user.isSubscriber ? "Yes" : "No"}</p>
-          <p>Following Since: {user.followingSince || "Not following"}</p>
+          <p>
+            Following Since:{" "}
+            {user.followingSince
+              ? new Date(user.followingSince).toLocaleString()
+              : "Not following"}
+          </p>
           <Box width="30%">
             <Table.Root>
               <Table.Header>
