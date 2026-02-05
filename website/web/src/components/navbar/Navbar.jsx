@@ -1,13 +1,14 @@
 import { NavLink } from "react-router-dom";
-import { TabNav, Flex } from "@radix-ui/themes";
+import { TabNav, Flex, Button } from "@radix-ui/themes";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../context/UserContext.jsx";
-import TwitchLogin from "../test/TwitchLogin";
+import TwitchLogin from "../login/TwitchLogin";
+import { ExitIcon } from "@radix-ui/react-icons";
 
 const Navbar = () => {
   const location = useLocation();
   const pathname = location.pathname;
-  const { user, loading } = useAuth();
+  const { user, loading, logout } = useAuth();
 
   return (
     <TabNav.Root>
@@ -41,6 +42,14 @@ const Navbar = () => {
                   style={{ height: "28px", borderRadius: "50%" }}
                 />
                 <p>{user.username}</p>
+                <Button
+                  variant="outline"
+                  size="1"
+                  color="gray"
+                  onClick={() => logout()}
+                >
+                  <ExitIcon />
+                </Button>
               </Flex>
             </NavLink>
           </TabNav.Link>

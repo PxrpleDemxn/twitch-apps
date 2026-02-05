@@ -1,6 +1,6 @@
 import React from "react";
-import StoreItemList from "../StoreItemList";
-import StoreItemProvider from "../StoreItemProvider";
+import StoreItemList from "../storeComponents/StoreItemList";
+import StoreItemProvider from "../storeComponents/StoreItemProvider";
 
 const Store = () => {
   return (

@@ -10,14 +10,6 @@ const userSchema = new mongoose.Schema(
     followingSince: { type: Date, default: null },
     isSubscriber: { type: Boolean, default: false },
     coins: { type: Number, default: 0 },
-    coinsHistory: [
-      {
-        _id: false,
-        reason: String,
-        amount: Number,
-        date: { type: Date, default: Date.now },
-      },
-    ],
     storePurchaseList: [
       {
         _id: false,

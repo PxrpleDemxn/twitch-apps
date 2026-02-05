@@ -63,7 +63,7 @@ const GameCardHorizontal = ({ game }) => {
                 color="gray"
                 style={{ fontStyle: "italic", lineHeight: "1.4" }}
               >
-                "{game.comment}"
+                {game.description}
               </Text>
             </Box>
 

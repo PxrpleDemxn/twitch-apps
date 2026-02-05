@@ -5,6 +5,7 @@ const User = require("../models/User");
 const Item = require("../models/Item");
 const Purchase = require("../models/Purchase");
 const { default: authenticateToken } = require("../utils/authenticateToken");
+const CoinsHistory = require("../models/CoinsHistory");
 
 router.post("/create", authenticateToken, async (req, res) => {
   const { twitchId, itemId } = req.body;
@@ -30,16 +31,18 @@ router.post("/create", authenticateToken, async (req, res) => {
         storePurchaseList: {
           purchaseId: newPurchase._id,
           itemId: newPurchase.itemId,
-          date: newPurchase.purchaseDate,
-        },
-        coinsHistory: {
-          amount: -item.price,
-          reason: `${item.name}`,
-          date: new Date(),
+          purchaseDate: newPurchase.purchaseDate,
         },
       },
     },
   );
+
+  await CoinsHistory.create({
+    twitchId: twitchId,
+    reason: item.name,
+    amount: -item.price,
+    date: newPurchase.purchaseDate,
+  });
 
   res.send(newPurchase);
 });

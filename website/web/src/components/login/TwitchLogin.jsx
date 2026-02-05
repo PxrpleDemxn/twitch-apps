@@ -1,3 +1,5 @@
+import { Button } from "@radix-ui/themes";
+
 const TwitchLogin = () => {
   const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
   const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI;
@@ -9,7 +11,7 @@ const TwitchLogin = () => {
     window.location.href = authUrl;
   };
 
-  return <button onClick={handleLogin}>Log in with Twitch</button>;
+  return <Button onClick={handleLogin}>Log in with Twitch</Button>;
 };
 
 export default TwitchLogin;

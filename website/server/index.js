@@ -7,6 +7,8 @@ const userRoute = require("./routes/user");
 const itemRoute = require("./routes/item");
 const purchaseRoute = require("./routes/purchase");
 const authRoute = require("./routes/auth");
+const coinsHistoryRoute = require("./routes/coinsHistory");
+const gameRoute = require("./routes/game");
 
 require("dotenv").config();
 
@@ -19,6 +21,8 @@ app.use("/user", userRoute);
 app.use("/item", itemRoute);
 app.use("/purchase", purchaseRoute);
 app.use("/auth", authRoute);
+app.use("/coinsHistory", coinsHistoryRoute);
+app.use("/game", gameRoute);
 
 const { MONGODB_URI, PORT } = process.env;
 
