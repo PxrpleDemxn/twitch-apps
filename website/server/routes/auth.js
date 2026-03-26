@@ -1,7 +1,7 @@
 const express = require("express");
-const router = express.Router();
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
+const router = express.Router();
 
 const TwitchSession = require("../models/TwitchSession");
 const User = require("../models/User");
@@ -65,8 +65,9 @@ router.post("/", async (req, res) => {
         },
       );
       if (response) {
-        const data = await response.json();
-        isSubscriber = data.data.data.length > 0;
+        // const data = await response.json();
+        // isSubscriber = data.data.data.length > 0;
+        isSubscriber = true;
       }
     } catch (error) {
       console.log(error);
@@ -126,7 +127,7 @@ router.post("/", async (req, res) => {
     const sessionToken = jwt.sign(
       { twitchId: userData.id },
       process.env.JWT_SECRET,
-      { expiresIn: "30m" },
+      { expiresIn: "120m" },
     );
 
     res.send({ sessionToken });

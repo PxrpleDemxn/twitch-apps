@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
       });
+      console.log("User data response:", response);
 
       if (response.ok) {
         return await response.json();

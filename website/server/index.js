@@ -9,6 +9,9 @@ const purchaseRoute = require("./routes/purchase");
 const authRoute = require("./routes/auth");
 const coinsHistoryRoute = require("./routes/coinsHistory");
 const gameRoute = require("./routes/game");
+const permissionRoute = require("./routes/permission");
+const { authenticate } = require("./utils/verifyPerms");
+const { loadPermissions } = require("./helpers/global");
 
 require("dotenv").config();
 
@@ -17,12 +20,17 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use("/user", userRoute);
-app.use("/item", itemRoute);
-app.use("/purchase", purchaseRoute);
+loadPermissions();
+
 app.use("/auth", authRoute);
-app.use("/coinsHistory", coinsHistoryRoute);
-app.use("/game", gameRoute);
+
+app.use("/permission", authenticate, permissionRoute);
+app.use("/user", authenticate, userRoute);
+app.use("/item", authenticate, itemRoute);
+app.use("/purchase", authenticate, purchaseRoute);
+
+app.use("/coinsHistory", authenticate, coinsHistoryRoute);
+app.use("/game", authenticate, gameRoute);
 
 const { MONGODB_URI, PORT } = process.env;
 

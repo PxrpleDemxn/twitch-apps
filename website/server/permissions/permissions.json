@@ -1,0 +1,22 @@
+[
+  {
+    "path": "item/create",
+    "roles": ["admin"]
+  },
+  {
+    "path": "item/delete",
+    "roles": ["admin"]
+  },
+  {
+    "path": "item/list",
+    "roles": ["admin", "user"]
+  },
+  {
+    "path": "user/get",
+    "roles": ["admin", "user"]
+  },
+  {
+    "path": "game/list",
+    "roles": ["admin", "user", "public"]
+  }
+]

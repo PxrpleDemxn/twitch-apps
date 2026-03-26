@@ -7,8 +7,8 @@ const authenticateToken = (req, res, next) => {
   if (!token) return res.sendStatus(401);
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) return res.sendStatus(403);
-    req.twitchId = decoded.twitchId;
+    if (err) return res.status(403).send("Invalid token");
+    req.body.twitchId = decoded.twitchId;
     next();
   });
 };

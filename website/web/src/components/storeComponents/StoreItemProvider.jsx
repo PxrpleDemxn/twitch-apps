@@ -9,8 +9,16 @@ const StoreItemProvider = ({ children }) => {
   useEffect(() => {
     const fetchStoreItems = async () => {
       try {
+        const token = localStorage.getItem("token");
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}item/list`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          },
         );
         const data = await response.json();
         setStoreItems(data);

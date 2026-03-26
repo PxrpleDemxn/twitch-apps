@@ -1,26 +1,32 @@
 const express = require("express");
 const router = express.Router();
+const { verifyPermissions } = require("../utils/permissionParser");
+const { authenticate } = require("../utils/verifyPerms");
 
 const User = require("../models/User");
-const { default: authenticateToken } = require("../utils/authenticateToken");
 
-router.post("/create", async (req, res) => {
-  const { twitchId } = req.body;
-
-  const newUser = new User({ twitchId: twitchId });
-  await newUser.save();
-
-  res.send(newUser);
-});
-
-router.get("/get", authenticateToken, async (req, res) => {
+router.get("/get", authenticate, async (req, res) => {
   const twitchId = req.twitchId;
+
   const user = await User.findOne({ twitchId: twitchId });
+  console.log(twitchId);
   res.send(user);
 });
 
 router.post("/addCurrency", async (req, res) => {
   const payload = req.body;
+
+  const hasPermission = await verifyPermissions(
+    req.twitchId,
+    "user",
+    "addCurrency",
+  );
+
+  console.log("Permission check result:", hasPermission);
+
+  if (!hasPermission) {
+    return res.status(403).send({ message: "You do not have permission." });
+  }
 
   const updatedUser = await User.findOneAndUpdate(
     { twitchId: payload.twitchId },
